@@ -1,0 +1,258 @@
+const express = require('express');
+const session = require('express-session');
+const authMiddleware = require('../middlewares/auth')
+const router = express.Router()
+
+ router.get("/productos",authMiddleware.isAuthenticated,async (req,res)=>{
+    
+    let data={};
+
+    try{
+        bearerToken= res.locals.session.token ||"";//session.get("token");
+
+        const respuesta = await fetch("http://127.0.0.1:8000"+"/api/products", { 
+                method: 'get',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${bearerToken}`
+                },
+            });
+    
+        if (!respuesta.ok) {
+            console.log(respuesta.statusText,":",respuesta.status)
+            throw new Error("failed:"+respuesta.statusText); // Handle login errors
+        }
+        
+        data = await respuesta.json();
+        //console.log(data)
+
+        }catch(error){
+            console.log(error)
+            res.locals.errorMessage = "Fallo la conexion"
+        }
+
+        res.render('../views/pages/all/productos',{
+            title:'Productos',
+            name:'productos',
+            data:data
+        })
+ });
+
+ router.get("/usuarios",authMiddleware.isAuthenticated,async(req,res)=>{
+    bearerToken= res.locals.session.token;
+    let data={}
+    try{
+
+        const respuesta = await fetch("http://127.0.0.1:8000"+"/api/users", { 
+                method: 'get',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${bearerToken}`
+                },
+            });
+    
+        if (!respuesta.ok) {
+            console.log(respuesta.statusText,":",respuesta.status)
+            throw new Error("failed:"+respuesta.statusText); // Handle login errors
+        }
+        
+        data = await respuesta.json();
+        //console.log(data)
+
+        }catch(error){
+            console.log(error)
+            res.locals.errorMessage = "Fallo la conexion"
+        }
+
+
+     res.render('../views/pages/all/usuarios',{
+        title:'Productos',
+         name:'usuarios',
+         data:data
+     })
+ });
+
+ //Guardar usuario
+ router.post("/register",async(req,res)=>{
+    const bearerToken= res.locals.session.token ||"";
+    const email = req.body.email
+    const password = req.body.password
+    const name = req.body.name
+
+    let data={}
+    try{
+        const respuesta = await fetch("http://127.0.0.1:8000"+"/api/register", { 
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${bearerToken}`
+                },
+                body: JSON.stringify({ email, password,name})
+            });
+    
+        if (!respuesta.ok) {
+            console.log(respuesta.statusText,":",respuesta.status)
+            throw new Error("failed:"+respuesta.statusText); // Handle login errors
+        }
+        
+        data = await respuesta.json();
+        console.log(data)
+
+        }catch(error){
+            console.log(error)
+            res.locals.errorMessage = "Fallo la conexion"
+        }
+
+     //res.json(data)
+     res.redirect("/usuarios")
+ })
+
+ ///productos/update
+
+ router.post("/productos/update",async(req,res)=>{
+    const bearerToken= res.locals.session.token ||"";
+    const id = req.body.id
+    const nombre = req.body.nombre
+    const descripcion = req.body.descripcion
+    const cantidad = req.body.cantidad
+    const precio   = req.body.precio
+
+    let data={}
+    try{
+        const respuesta = await fetch("http://127.0.0.1:8000"+"/api/products/update", { 
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${bearerToken}`
+                },
+                body: JSON.stringify({ id, nombre,descripcion,precio,cantidad})
+            });
+    
+        if (!respuesta.ok) {
+            console.log(respuesta.statusText,":",respuesta.status)
+            throw new Error("failed:"+respuesta.statusText); // Handle login errors
+        }
+        
+        data = await respuesta.json();
+        console.log(data)
+
+        }catch(error){
+            console.log(error)
+            res.locals.errorMessage = "Fallo la conexion"
+        }
+
+     //res.json(data)
+     res.redirect("/productos")
+ })
+
+
+ router.get("/ventas",authMiddleware.isAuthenticated,async(req,res)=>{
+    let data={}
+    try{
+        const bearerToken= res.locals.session.token ;
+        const respuesta = await fetch("http://127.0.0.1:8000"+"/api/sales", { 
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${bearerToken}`
+                }
+            });
+
+        if (!respuesta.ok) {
+            console.log(respuesta.statusText,":",respuesta.status)
+            throw new Error("failed:"+respuesta.statusText); // Handle login errors
+        }
+        
+        data =  await respuesta.json();
+        console.log(data);
+    
+    }catch(error){
+        console.log(error)
+        res.locals.errorMessage = "Fallo la conexion"
+    }
+
+     res.render('../views/pages/all/ventas',{
+        title:'Productos',
+         name:'ventas',
+         data
+     })
+});
+
+router.post("/ventas",authMiddleware.isAuthenticated, async(req,res)=>{
+
+    const producto = req.body.producto.id.map((id, index) => ({
+    id: Number(id),
+    cantidad: Number(req.body.producto.cantidad[index]),
+    total: Number(req.body.producto.total[index])
+    }));
+    const myData={product:producto}
+    console.log(myData)
+
+    try{
+        const bearerToken= res.locals.session.token ;
+        console.log("Token"+bearerToken)
+
+        const respuesta = await fetch("http://127.0.0.1:8000"+"/api/sale", { 
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${bearerToken}`
+                },
+                body:JSON.stringify(myData)
+            });
+
+        if (!respuesta.ok) {
+            console.log(respuesta.statusText,":",respuesta.status)
+            throw new Error("failed:"+respuesta.statusText); // Handle login errors
+        }
+        
+        const data =  await respuesta.json();
+        
+        }catch(error){
+            console.log(error)
+            res.locals.errorMessage = "Fallo la conexion"
+        }
+
+    // if(error){
+    //     backURL=req.header('Referer') || '/';
+    //     res.redirect(backURL);
+    // }
+
+    res.redirect("/ventas");
+});
+
+router.get("/ventas/car",authMiddleware.isAuthenticated,async(req,res)=>{
+    let productos={};
+
+    try{
+        bearerToken= res.locals.session.token ||"";//session.get("token");
+
+        const respuesta = await fetch("http://127.0.0.1:8000"+"/api/products", { 
+                method: 'get',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${bearerToken}`
+                },
+            });
+    
+        if (!respuesta.ok) {
+            console.log(respuesta.statusText,":",respuesta.status)
+            throw new Error("failed:"+respuesta.statusText); // Handle login errors
+        }
+        
+        productos = await respuesta.json();
+        //console.log(productos)
+
+        }catch(error){
+            console.log(error)
+            res.locals.errorMessage = "Fallo la conexion"
+        }
+
+     res.render('../views/pages/all/car',{
+        title:'Carrito',
+        name:'ventas',
+        data:productos
+     })
+});
+
+module.exports = router

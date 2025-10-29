@@ -1,0 +1,99 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="breadcrumb-main">
+                <h4 class="text-capitalize breadcrumb-title"><%- __('ventas') %></h4>
+                <div class="breadcrumb-action justify-content-center flex-wrap">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="#"><i class="las la-home"></i><%- __('Inicio') %></a></li>
+                            <li class="breadcrumb-item active" aria-current="page"><%- __('ventas') %></li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+
+            <div class="card">
+                <div class="card-header color-dark fw-500 flex-row-reverse">
+                   <a href="/ventas/car" class="btn px-15 btn-primary">
+                        <i class="las la-plus"></i>nuevo</a>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table4 p-25 mb-30">
+                        <div class="table-responsive">
+                            <table class="table mb-0">
+                                <thead>
+                                    <tr class="userDatatable-header">
+                                        <th>
+                                            <span class="userDatatable-title">Producto</span>
+                                        </th>
+                                        <th>
+                                            <span class="userDatatable-title">Cantidad</span>
+                                        </th>
+                                        <th>
+                                        <span class="userDatatable-title">Precio</span>
+                                        <th>
+                                            <span class="userDatatable-title">Nombre</span>
+                                        </th>
+                                        <th>
+                                            <span class="userDatatable-title">Fecha</span>
+                                        </th>
+                                        
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% for(var i=0; i< data.length; i++) {%>
+                                    <tr>
+                                        <td>
+                                            <div class="userDatatable-content">
+                                                <%-data[i].producto.nombre%>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="userDatatable-content">
+                                                <%-data[i].cantidad%>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="userDatatable-content">
+                                                 <%-data[i].producto.precio%>
+                                            </div>
+                                        </td>
+                                        
+                                        <td>
+                                            <div class="userDatatable-content">
+                                                 <%-data[i].user.name%>
+                                            </div>
+                                        </td>
+
+                                        <td>
+                                            <div class="userDatatable-content">
+                                                <%
+                                                const opciones = {
+                                                    year: 'numeric',
+                                                    month: 'numeric',
+                                                    day: 'numeric',
+                                                    hour: 'numeric',
+                                                    minute: 'numeric',
+                                                    };
+                                                %>
+                                                 <%-new Date(data[i].created_at).toLocaleString('es-ES', opciones)%>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <% }%>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        
+    </div>
+</div>

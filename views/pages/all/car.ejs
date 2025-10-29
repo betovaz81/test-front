@@ -1,0 +1,179 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="shop-breadcrumb">
+                <div class="breadcrumb-main">
+                    <h4 class="text-capitalize breadcrumb-title"><%- __('cart') %></h4>
+                    <div class="breadcrumb-action justify-content-center flex-wrap">
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="#"><i class="las la-home"></i>App</a></li>
+                                <li class="breadcrumb-item active" aria-current="page"><%- __('cart') %></li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-fluid">
+
+    <div class="col-lg-12">
+            <div class="card card-Vertical card-default card-md mb-4">
+                
+                <div class="card-body py-md-30">
+                    <div class=" alert alert-warning d-none" role="alert"  >
+                        <div id="alert" class="alert-content"></div>
+                    </div>
+                    <form>
+                        <div class="row">
+                            <div class="col-md-4 mb-25">
+                                <select id="producto" class="form-control ih-medium ip-gray radius-xs b-light px-15" placeholder="selecciona ....">
+                                    <% for(var i=0; i<data.length; i++) {%>
+                                        <option 
+                                        data-producto='<%- data[i].nombre%>'
+                                        data-precio='<%- data[i].precio%>'
+                                        data-cantidad='<%- data[i].cantidad%>'
+                                        value='<%- data[i].id%>'><%-data[i].nombre %></option>
+                                    <%}%>
+                                </select>
+                            </div>
+                            <div class="col-md-2 mb-25">
+                                <input type="number" id="productoCantidad" class="form-control ih-medium ip-gray radius-xs b-light px-15" min="1" max="100" placeholder="1" value="1">
+                            </div>
+                            
+                            
+                            <div class="col-md-4">
+                                <div class="layout-button mt-0">
+                                    <button type="button" onclick="agregar()" class="btn btn-primary btn-default btn-squared px-30">Agregar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    <div class="cartPage  global-shadow pe-sm-30 ps-sm-30  p-15 py-sm-30 bg-white radius-xl w-100 mb-30">
+        <form action="/ventas" method="post">
+        <div class="row justify-content-center">
+            <div class="cus-xl-9 col-12 ">
+                <div class="product-cart mb-sm-0 mb-20">
+                    <div class="table-responsive">
+                        <table id="cart" class="table table-borderless table-hover">
+                            <thead>
+                                <tr class="product-cart__header">
+                                    <th scope="col">Producto</th>
+                                    <th scope="col">Precio</th>
+                                    <th scope="col">Cantidad</th>
+                                    <th scope="col" class="text-center">Total</th>
+                                    <th scope="col" class=""></th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbodyProductos">
+                            </tbody>
+                           
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="cus-xl-3 col-md-8  ">
+                <div class="card order-summery bg-normal p-sm-25 p-15 order-summery--width ">
+                    <div class="card-header border-bottom-0 p-0 pb-25">
+                        <h5 class="fw-500">Orden</h5>
+                    </div>
+                    <div class="card-body bg-white px-sm-25 px-20">
+                        <div class="total">
+                            <div class="subtotalTotal">
+                                Subtotal:
+                                <span id="SubTotal">$0.00</span>
+                            </div>
+                            <div class="taxes">
+                                discount:
+                                <span>$0.00</span>
+                            </div>
+                            <div class="shipping">
+                                Shipping charge:
+                                <span >$0.00</span>
+                            </div>
+                        </div>
+                        
+                        <div class="total-money d-flex justify-content-between">
+                            <h6>Total :</h6>
+                            <h5 id="Total">$0.00</h5>
+                        </div>
+                        <button type="submit" class="checkout btn-secondary content-center w-100 btn-lg mt-20"> Genera Venta<i class="las la-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script>
+    let Total=0
+    function agregar(){
+        
+        const id = $("#producto").val()
+        const nombre = $('#producto option:selected').text();
+        const precio = $("#producto option:selected").data("precio")
+        const cantidad = $("#productoCantidad").val();
+        if(parseInt(cantidad ) <=0){
+          $("#alert").html("cantidad debe ser mayor a 0")
+          $("#alert").parent().removeClass("d-none");
+          console.log($("#alert").parent())
+          return false
+        }
+        $("#alert").parent().addClass("d-none");
+
+        const precioT = parseFloat(precio) *parseInt(cantidad);
+        Total +=precioT;
+        $("#SubTotal").html(Total.toFixed(2))
+        $("#Total").html(Total.toFixed(2))
+
+        $("#tbodyProductos").append(`
+         <tr>
+        <td class="Product-cart-title">
+            <input type='hidden' value='${id}' name='producto[id]' >
+            <input type='hidden' value='${precioT}' name='producto[total]' >
+            <div class="media  align-items-center">
+                <div class="media-body">
+                    <h5 class="mt-0">${nombre}</h5>
+                </div>
+            </div>
+        </td>
+        <td class="price">$${precio}</td>
+        <td>
+            <div class="quantity product-cart__quantity">
+                <input type="button" value="-" class="qty-minus bttn bttn-left wh-36">
+                <input type="number" name='producto[cantidad]' value="${cantidad}" min="1" max="100" class="qty qh-36 input">
+                <input type="button" value="+" class="qty-plus bttn bttn-right wh-36">
+            </div>
+        </td>
+        <td class="text-center subtotal">$${precioT.toFixed(2)}</td>
+        <td class="actions">
+            <button type="button" class="action-btn float-end" onclick="borrar(this)">
+                <i class="las la-trash-alt"></i>
+            </button>
+        </td>
+    </tr>
+        `)
+    }
+
+    function borrar(elemento){
+        
+        const filaProducto = $(elemento).closest('tr');
+        console.log(filaProducto)
+        if(filaProducto){
+            const inputTotal = filaProducto[0].querySelector('input[name="producto[total]"]');
+            const valorTotal = inputTotal.value;
+            Total = parseFloat(Total) - parseFloat(valorTotal);
+            $("#SubTotal").html(Total.toFixed(2))
+            $("#Total").html(Total.toFixed(2))
+
+            $(elemento).closest('tr').remove();
+        }
+    }
+</script>

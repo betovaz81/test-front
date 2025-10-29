@@ -1,0 +1,29 @@
+<div class="sidebar sidebar-collapse" id="sidebar">
+    <div class="sidebar__menu-group">
+        <ul class="sidebar_nav">
+            
+            <li>
+                <a href="<%- locals.base %>ventas/" class="<%- name === 'ventas' ? 'active':'' %>">
+                    <span class="nav-icon uil uil-arrow-growth"></span>
+                    <span class="menu-text"><%- __('Ventas') %></span>
+                </a>
+            </li>
+            <li class="menu-title mt-30">
+                <span>Catalogos</span>
+            </li>
+           <li>
+                <a href="<%- locals.base %>productos/" class="<%- name === 'productos' ? 'active':'' %>">
+                    <span class="nav-icon uil uil-arrow-growth"></span>
+                    <span class="menu-text"><%- __('Productos') %></span>
+                </a>
+            </li>
+            <li>
+                <a href="<%- locals.base %>usuarios/" class="<%- name === 'usuarios' ? 'active':'' %>">
+                    <span class="nav-icon uil uil-arrow-growth"></span>
+                    <span class="menu-text"><%- __('Usuarios') %></span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+</div>
