@@ -401,10 +401,12 @@ router.get("/ventas/car",authMiddleware.isAuthenticated,async(req,res)=>{
 
 
 router.post("/logout",authMiddleware.isAuthenticated,async(req,res)=>{
-    delete req.session
-        const bearerToken= res.locals.session.token ||"";
+    
+    const bearerToken= res.locals.session.token ||"";
 
     try{
+        delete req.session
+        delete res.locals.session 
         const respuesta = await fetch("http://127.0.0.1:8000"+"/api/logout", { 
                 method: 'get',
                 headers: {
