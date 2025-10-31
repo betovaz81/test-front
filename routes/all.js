@@ -264,28 +264,28 @@ const router = express.Router()
     console.log(req.params); 
     const uuid=req.params.uuid
     let data={}
-    // try{
-    //     const bearerToken= res.locals.session.token ;
-    //     const respuesta = await fetch("http://127.0.0.1:8000"+"/api/sales/details/"+uuid, { 
-    //             method: 'GET',
-    //             headers: {
-    //                 'Content-Type': 'application/json',
-    //                 'Authorization': `Bearer ${bearerToken}`
-    //             }
-    //         });
+    try{
+        const bearerToken= res.locals.session.token ;
+        const respuesta = await fetch("http://127.0.0.1:8000"+"/api/sales/detail/"+uuid, { 
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${bearerToken}`
+                }
+            });
 
-    //     if (!respuesta.ok) {
-    //         console.log(respuesta.statusText,":",respuesta.status)
-    //         throw new Error("failed:"+respuesta.statusText); // Handle login errors
-    //     }
+        if (!respuesta.ok) {
+            console.log(respuesta.statusText,":",respuesta.status)
+            throw new Error("failed:"+respuesta.statusText); // Handle login errors
+        }
         
-    //     data =  await respuesta.json();
-    //     //console.log(data);
+        data =  await respuesta.json();
+        console.log(data);
     
-    // }catch(error){
-    //     console.log(error)
-    //     res.locals.errorMessage = "Fallo la conexion"
-    // }
+    }catch(error){
+        console.log(error)
+        res.locals.errorMessage = "Fallo la conexion"
+    }
 
      res.render('../views/pages/all/details',{
          title:'Detalles Venta',
@@ -401,6 +401,28 @@ router.get("/ventas/car",authMiddleware.isAuthenticated,async(req,res)=>{
 
 
 router.post("/logout",authMiddleware.isAuthenticated,async(req,res)=>{
+    
+    const bearerToken= res.locals.session.token ||"";
+
+    try{
+        delete req.session
+        delete res.locals.session 
+        const respuesta = await fetch("http://127.0.0.1:8000"+"/api/logout", { 
+                method: 'get',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${bearerToken}`
+                },
+            });
+
+        }catch(error){
+            console.log(error)
+            res.locals.errorMessage = "Error: "+error
+        }
+    res.redirect("/");
+
+})
+router.get("/logout",authMiddleware.isAuthenticated,async(req,res)=>{
     
     const bearerToken= res.locals.session.token ||"";
 

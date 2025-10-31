@@ -792,12 +792,13 @@
                                 </li>
                                 
                             </ul>
-                            <a href="" onclick="                                   
-                                event.preventDefault()
-                                document.getElementById('logout').submit()" class="nav-author__signout">
-                                <i class="uil uil-sign-out-alt"></i> Salir</a>
-                                <form style="display:none;" id="logout" action="<%- locals.base %>logout" method="POST">
+                            <form style="display:none;" id="logout" action="/logout" method="POST">
                                 </form>
+                            <a class="nav-author__signout"
+                                href="/logout;" 
+                                onclick="event.preventDefault();document.getElementById('logout').submit()">
+                                <i class="uil uil-sign-out-alt"></i> Salir</a>
+                                
                         </div>
                     </div>
                 </div>

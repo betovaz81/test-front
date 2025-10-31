@@ -29,19 +29,21 @@
                                 <div class="display-3">
                                     Factura
                                 </div>
-                                <p>No : <span>#642678</span></p>
-                                <p>Fecha : <span>Jan 17, 2020</span></p>
+                                <p>No : <span>#<%-data["uuid"]%></span></p>
+                                <p>Fecha : <span><%-new Date(data["created_at"]).toLocaleString('es-ES', {year: 'numeric',month: 'numeric',day: 'numeric'})%></span></p>
+
                             </div>
                         </div>
                         <div class="d-flex justify-content-center mb-lg-0 mb-25">
                             <div class="payment-invoice-qr__code bg-white radius-xl p-20">
                                 <img src="<%- locals.base %>img/qr.png" alt="qr">
-                                <p>8364297359912267</p>
+                                <p><%-data["uuid"]%></p>
                             </div>
                         </div>
                         
                     </div>
                     <div class="payment-invoice-table">
+                        
                         <div class="table-responsive">
                             <table id="cart" class="table table-borderless">
                                 <thead>
@@ -54,21 +56,31 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    <%
+                                    const opciones = {
+                                        year: 'numeric',
+                                        month: 'numeric',
+                                        day: 'numeric',
+                                        hour: 'numeric',
+                                        minute: 'numeric',
+                                        };
+                                    %>
+                                 <% for(var i=0; i< data["items"].length; i++) {%>
                                     <tr>
-                                        <th>1</th>
-                                        <td class="Product-cart-title">
-                                            <div class="media  align-items-center">
-                                                <div class="media-body">
-                                                    <h5 class="mt-0">Fiber base chair</h5>
-                                                    
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="unit text-end">$248.66</td>
-                                        <td class="invoice-quantity text-end">1</td>
-                                        <td class="text-end order">$5.11</td>
+                                    <th><%-i+1%></th>
+                                    <td class="Product-cart-title">
+                                        <div class="media  align-items-center">
+                                        <div class="media-body">
+                                            <h5 class="mt-0"><%-data["items"][i].producto.nombre%></h5>
+
+                                        </div>
+                                        </div>
+                                    </td>
+                                    <td class="unit text-end">$<%-data["items"][i].producto.precio%></td>
+                                    <td class="invoice-quantity text-end"><%-data["items"][i].cantidad%></td>
+                                    <td class="text-end order">$<%-data["items"][i].costo%></td>
                                     </tr>
-                                    
+                                <%}%>
                                 </tbody>
                                 <tfoot>
                                     <tr>
@@ -86,8 +98,8 @@
                                         </td>
                                         <td>
                                             <div class="total-order float-right text-end fs-14 fw-500">
-                                                <p>-$126.30</p>
-                                                <h5 class="text-primary">$1736.00</h5>
+                                                <p>$<%-data["total"]%></p>
+                                                <h5 class="text-primary">$<%-data["total"]%></h5>
                                             </div>
                                         </td>
                                     </tr>
