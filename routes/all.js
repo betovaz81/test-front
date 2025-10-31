@@ -401,7 +401,7 @@ router.get("/ventas/car",authMiddleware.isAuthenticated,async(req,res)=>{
 
 
 router.post("/logout",authMiddleware.isAuthenticated,async(req,res)=>{
-    delete request.session
+    delete req.session
         const bearerToken= res.locals.session.token ||"";
 
     try{
