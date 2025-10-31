@@ -19,7 +19,14 @@ const errorMessage = (request, response, next) => {
     next()
  }
 
+ const notifyMessage = (request, response, next) => {
+    response.locals.notifyMessage = request.session.notifyMessage
+    delete request.session.notifyMessage
+    next()
+ }
+
 module.exports = {
     globalSession,
-    errorMessage
+    errorMessage,
+    notifyMessage
 }

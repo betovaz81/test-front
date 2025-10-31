@@ -47,7 +47,8 @@ const authenticate = async (request, response, next) => {
     
      request.session.user = data.data
      //request.session.save()
-     response.redirect('/dashboard/' )
+
+     response.redirect('/dashboard/')
      
     } catch (error) {
         console.error('Error during login:'+ error);

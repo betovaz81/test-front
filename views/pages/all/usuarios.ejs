@@ -50,6 +50,41 @@
     </div>
 
 
+    <div class="modal fade update-member" id="update-member" role="dialog" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content  radius-xl">
+                <div class="modal-header">
+                    <h6 class="modal-title fw-500" id="staticBackdropLabel">Actualizar Usuario</h6>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg replaced-svg"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="update-member-modal">
+                        <form action="/usuarios/update" method="post" >
+                            <input type="hidden" name="id" id="id" class="form-control" >
+                            <div class="form-group mb-20">
+                                <input type="text" name="name" id="name" class="form-control" placeholder="Nombre Completo">
+                            </div>
+                            <div class="form-group mb-20">
+                                <input type="text" name="email" id="email" class="form-control" placeholder="Correo electronico">
+                            </div>
+                            <div class="form-group mb-20">
+                                <input type="password" name="password" id="password" class="form-control" placeholder="Clave">
+                            </div>
+                            
+                            <div class="button-group d-flex pt-25">
+                                <button type="submit" class="btn btn-primary btn-default btn-squared text-capitalize">Guardar</button>
+                                <button type="button" class="btn btn-light btn-default btn-squared fw-400 text-capitalize b-light color-light" data-bs-dismiss="modal">Cancelar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <div class="row">
         <div class="col-12">
             <div class="card">
@@ -58,6 +93,16 @@
                         <i class="las la-plus"></i>nuevo</a>
                 </div>
                 <div class="card-body p-0">
+                    <% if (locals.notifyMessage) { %>
+                        <div class=" alert alert-info  alert-dismissible fade show mx-4 " role="alert">
+                            <div class="alert-content">
+                                <p><%-locals.notifyMessage%></p>
+                                <button type="button" class="btn-close text-capitalize" data-bs-dismiss="alert" aria-label="Close">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg rony replaced-svg"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                                </button>
+                            </div>
+                        </div>
+                    <% } %>
                     <div class="table4 p-25 mb-30">
                         <div class="table-responsive">
                             <table class="table mb-0">
@@ -97,7 +142,19 @@
                                                     <%-data[i].email%>
                                                 </div>
                                             </td>
-                                            <td><a href="javascript:alert('Trabajando...')" >Actualizar</a></td>
+                                            <td>
+                                               <button type="button" 
+                                                   onclick="edicionUsuario('<%-data[i].id%>','<%-data[i].name%>','<%-data[i].email%>')"
+                                                  class="breadcrumb-edit btn btn-white border-0 color-primary content-center fs-12 fw-500 radius-md">
+                                                <svg xmlns="http://www.w3.org/2000/svg" 
+                                                    width="24" height="24" 
+                                                    viewBox="0 0 24 24" fill="none" 
+                                                    stroke="currentColor" stroke-width="2" 
+                                                    stroke-linecap="round" stroke-linejoin="round" 
+                                                    class="svg replaced-svg"><path d="M12 20h9"></path>
+                                                    <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+                                                    </svg>editar</button>
+                                            </td>
                                         </tr>
                                     <% } %>
 
@@ -115,3 +172,12 @@
         
     </div>
 </div>
+
+<script>
+    function edicionUsuario(id,name,email){
+        $('#update-member').modal('show');
+        $("#id").val(id)
+        $("#name").val(name)
+        $("#email").val(email)
+    }   
+</script>

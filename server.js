@@ -18,7 +18,7 @@ const dashboard_routes = require('./routes/dashboard')
 const all_routes = require('./routes/all')
 
 app.use(session({
-   secret: '.D>8z]?H?{(DqzJ*',
+   secret: process.env.SECRET,
    resave: false,
    saveUninitialized: true,
    cookie: {
@@ -33,6 +33,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 
 app.use(globalSession.globalSession)
 app.use(globalSession.errorMessage)
+app.use(globalSession.notifyMessage)
 
 //guardamos en session base
 app.locals.base = BASE_URL

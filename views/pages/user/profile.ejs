@@ -1,0 +1,84 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="contact-breadcrumb">
+
+                <div class="breadcrumb-main add-contact justify-content-sm-between ">
+                    <div class=" d-flex flex-wrap justify-content-center breadcrumb-main__wrapper">
+                        <div class="d-flex align-items-center add-contact__title justify-content-center me-sm-25">
+                            <h4 class="text-capitalize fw-500 breadcrumb-title">Perfil</h4>
+                            <span class="sub-title ms-sm-25 ps-sm-25"></span>
+                        </div>     
+                    </div>
+                </div>
+            </div>
+            <!-- ends: contact-breadcrumb -->
+        </div>
+    </div>
+
+    <div class="card mb-50">
+        <div class="row justify-content-center">
+            <div class="col-md-5 col-10">
+                <div class="mt-40 mb-50">
+                    <div class="account-profile d-flex align-items-center mb-4 ">
+                        <div class="ap-img pro_img_wrapper">
+                            <input id="file-upload" type="file" name="fileUpload" class="d-none">
+                            <!-- Profile picture image-->
+                            <label for="file-upload">
+                                <img class="ap-img__main rounded-circle wh-120 bg-lighter d-flex" id="previewImg" src="<%- locals.base %>img/author/profile.png" alt="profile">
+                                <span class="cross" id="remove_pro_pic">
+                                    <img src="<%- locals.base %>img/svg/camera.svg" alt="camera" class="svg">
+                                </span>
+                            </label>
+                        </div>
+                        <div class="account-profile__title">
+                            <h6 class="fs-15 ms-20 fw-500 text-capitalize">profile photo</h6>
+                        </div>
+                    </div>
+                    <div class="edit-profile__body">
+                        <form action="<%- locals.base %>customer/create/<%- locale %>" method="POST">
+                            <input type="hidden" id="image" name="image" value="">
+                            <div class="form-group mb-25">
+                                <label for="name">Nombre</label>
+                                <input type="text" class="form-control" id="name" name="name" placeholder="">
+                                <% if (locals.errors && locals.errors.name) { %> 
+                                    <span class="text-danger"><%- errors.name %></span>
+                                <% } %>
+                            </div>
+                            <div class="form-group mb-25">
+                                <label for="email">Correo</label>
+                                <input type="email" class="form-control" id="email" name="email" placeholder="">
+                                <% if (locals.errors && locals.errors.email) { %> 
+                                    <span class="text-danger"><%- errors.email %></span>
+                                <% } %>
+                            </div>
+                            
+                            <div class="button-group d-flex pt-25 justify-content-md-end justify-content-start">
+                                <button class="btn btn-primary btn-default btn-squared text-capitalize radius-md shadow2 btn-sm">Actualizar
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var getImg = document.getElementById('file-upload');
+
+    function openFile (file) {
+        var input = file.target;
+
+        var reader = new FileReader();
+        reader.onload = function(){
+            var dataURL = reader.result;      
+            document.getElementById('previewImg').src = dataURL;              
+            document.getElementById('image').value = dataURL;              
+        };
+        reader.readAsDataURL(input.files[0]);
+    };
+    
+    getImg.addEventListener('change', openFile)
+</script>
