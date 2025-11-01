@@ -1,6 +1,6 @@
-# 🏪 Sistema Test
+# 📋 Sistema Test
 
-## 📋 Descripción
+## Descripción
 
 El objetivo del sistema es administrar una tienda que permita:
 
@@ -8,6 +8,7 @@ El objetivo del sistema es administrar una tienda que permita:
 - Controlar el inventario.
 - Registrar las salidas o ventas.
 - Asociar cada venta con la persona que la realizó.
+- Llevar control del horario de entrada y salida de los empleados.
 
 ---
 
@@ -17,7 +18,7 @@ El sistema está desarrollado con **[Express.js](https://expressjs.com/)** y uti
 
 ---
 
-## 🧭 Rutas principales
+## ⚙️ Rutas principales
 
 | Ruta              | Descripción                                                       |
 | ----------------- | ----------------------------------------------------------------- |
