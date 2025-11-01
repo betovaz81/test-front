@@ -13,7 +13,8 @@ const isAuthenticated = (request, response, next) => {
 const isGuest = (request, response, next) => {
      if(request.session.user){
         console.log("Redireccionamos porque tiene session")
-         return response.redirect('dashboard/' )
+        console.log(request.session.user)
+         return response.redirect('/dashboard' )
      }
     next()
 }

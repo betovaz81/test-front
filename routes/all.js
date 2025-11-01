@@ -403,40 +403,57 @@ router.get("/ventas/car",authMiddleware.isAuthenticated,async(req,res)=>{
 router.post("/logout",authMiddleware.isAuthenticated,async(req,res)=>{
     
     const bearerToken= res.locals.session.token ||"";
+    console.log("Salida por post:")
 
     try{
-        delete req.session
-        delete res.locals.session 
+        
         const respuesta = await fetch("http://127.0.0.1:8000"+"/api/logout", { 
-                method: 'get',
+                method: 'post',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${bearerToken}`
                 },
             });
+        if (!respuesta.ok) {
+            console.log(respuesta.statusText,":",respuesta.status)
+            throw new Error("failed:"+respuesta.statusText); // Handle login errors
+        }
+        
+        data =  await respuesta.json();
+        req.session.destroy((err) => {
+            if (err) {
+                console.log('Error al destruir sesión:', err)
+                return res.redirect('/')
+            }
+
+            res.locals.session = null
+            console.log("Sesión destruida correctamente")
+            res.redirect('/')
+        })
 
         }catch(error){
             console.log(error)
             res.locals.errorMessage = "Error: "+error
+            res.redirect("/");
         }
-    res.redirect("/");
 
 })
+
 router.get("/logout",authMiddleware.isAuthenticated,async(req,res)=>{
     
     const bearerToken= res.locals.session.token ||"";
-
+    console.log("salida por get")
     try{
         delete req.session
         delete res.locals.session 
         const respuesta = await fetch("http://127.0.0.1:8000"+"/api/logout", { 
-                method: 'get',
+                method: 'post',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${bearerToken}`
                 },
             });
-
+        console.log(respuesta.ok)
         }catch(error){
             console.log(error)
             res.locals.errorMessage = "Error: "+error
@@ -444,4 +461,5 @@ router.get("/logout",authMiddleware.isAuthenticated,async(req,res)=>{
     res.redirect("/");
 
 })
+
 module.exports = router
